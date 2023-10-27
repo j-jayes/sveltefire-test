@@ -1,8 +1,8 @@
 <script lang="ts">
   import Doc from "$lib/components/Doc.svelte";
-  import SignedOut from '$lib/components/SignedOut.svelte';
-  import { signInAnonymously } from "firebase/auth";
+  import SignedOut from "$lib/components/SignedOut.svelte";
   import {
+    Timestamp,
     addDoc,
     collection,
     orderBy,
@@ -17,9 +17,15 @@
   async function addPost(uid: string) {
     const posts = collection(firestore, `users/${uid}/posts`);
     await addDoc(posts, {
-      content: 'firestore item ' + (Math.random() + 1).toString(36).substring(7),
+      content:
+        "firestore item " + (Math.random() + 1).toString(36).substring(7),
       created: Date.now(),
     });
+  }
+
+  function formatDate(dateString) {
+    const options = { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric"};
+    return new Date(dateString).toLocaleDateString(undefined, options);
   }
 
   $: makeQuery = (uid: string) => {
@@ -33,23 +39,12 @@
 
 <h1>Firestore Test</h1>
 
-<h2>Single Document</h2>
-
-<Doc ref="posts/test" let:data={post}>
-  <p data-testid="doc-data">{post?.title}</p>
-  <div slot="loading">
-    <p data-testid="loading">Loading...</p>
-  </div>
-</Doc>
-
 <h2>User Owned Posts</h2>
 
 <SignedOut let:auth>
-    <h2>Signed Out</h2>
-   <button on:click={() => signInAnonymously(auth)}>Sign In</button>
+  <h2>Signed Out</h2>
+  <p>Log in or register to see your posts</p>
 </SignedOut>
-
-
 
 <SignedIn let:user>
   <h2>Collection</h2>
@@ -63,7 +58,7 @@
 
     <ul>
       {#each posts as post (post.id)}
-        <li>{post?.content} ... {post.id}</li>
+        <li>{post?.content} ... {post.id} ... {formatDate(post.created)}</li>
       {/each}
     </ul>
 

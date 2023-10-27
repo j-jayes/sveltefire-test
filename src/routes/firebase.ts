@@ -6,13 +6,13 @@ import { connectStorageEmulator, getStorage, ref, uploadString } from "firebase/
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAMHfJp1ec85QBo-mnke89qtiYGen9zTSE",
-    authDomain: "sveltefire-testing.firebaseapp.com",
-    databaseURL: "https://sveltefire-testing.firebaseio.com",
-    projectId: "sveltefire-testing",
-    storageBucket: "sveltefire-testing.appspot.com",
-    messagingSenderId: "1030648105982",
-    appId: "1:1030648105982:web:2afebc34841fa242ed4eaf"
+    apiKey: "AIzaSyCXn_4Tcl8QAsRw_uTkNeOBtorGk4-EzIk",
+    authDomain: "sveltefire-test-5435b.firebaseapp.com",
+    projectId: "sveltefire-test-5435b",
+    storageBucket: "sveltefire-test-5435b.appspot.com",
+    messagingSenderId: "662349357493",
+    appId: "1:662349357493:web:bc06115f5efe916b52f9fc",
+    measurementId: "G-1BBJPPW025"
 };
 
 // Initialize Firebase
@@ -20,29 +20,3 @@ export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
-
-if (dev || import.meta.env.MODE === "ci") {
-    connectAuthEmulator(auth, "http://localhost:9099");
-    connectFirestoreEmulator(db, "localhost", 8080);
-    connectStorageEmulator(storage, "localhost", 9199);
-
-    // Seed Firestore
-    setDoc(doc(db, "posts", "test"), {
-        title: "Hi Mom",
-        content: "this is a test"
-    });
-
-    
-    // Create a reference to the file to create
-    const fileRef = ref(storage, "test.txt");
-
-    // Upload a string to the file
-    uploadString(fileRef, "Hello, world!", "raw")
-        .then(() => {
-            console.log("File created successfully!");
-        })
-        .catch((error) => {
-            console.error("Error creating file:", error);
-        });
-}
-
