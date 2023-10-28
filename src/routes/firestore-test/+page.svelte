@@ -35,6 +35,11 @@
     );
     return q;
   };
+
+  $: makeQueryQuestions = () => {
+    const q = query(collection(firestore, "questions"), orderBy("votes"));
+    return q;
+  };
 </script>
 
 <h1>Firestore Test</h1>
@@ -63,5 +68,22 @@
     </ul>
 
     <button on:click={() => addPost(user.uid)}>Add Post</button>
+  </Collection>
+
+  <h2>Collection</h2>
+  <Collection
+    ref={makeQueryQuestions()}
+    startWith={[]}
+    let:data={questions}
+    let:count
+  >
+    <p data-testid="count">There are {count} questions</p>
+
+    <ul>
+      {#each questions as question (question.id)}
+        <li>{question?.body}  {question.id} ... {formatDate(question.createdAt)}</li>
+      {/each}
+    </ul>
+
   </Collection>
 </SignedIn>

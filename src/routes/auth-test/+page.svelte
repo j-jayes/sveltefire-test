@@ -8,7 +8,7 @@
 
 <SignedIn let:user let:signOut>
     <h2>Signed In</h2>
-    <p>Hello {user.uid}</p>
+    <p>Hello {user.email}</p>
     <button on:click={signOut}>Sign Out</button>
 </SignedIn>
 

@@ -13,6 +13,8 @@
   <li><a href="/firestore-test">Firestore Test</a></li>
   <li><a href="/ssr-test">SSR Test</a></li>
   <li><a href="/storage-test">Storage Test</a></li>
+  <li><a href="/add-question-data-test">Add Question Data Test</a></li>
+  <li><a href="/add-question">Add Question</a></li>
 </ul>
 <ul>
   <li data-testid="auth">Auth Context: {!!ctx.auth}</li>

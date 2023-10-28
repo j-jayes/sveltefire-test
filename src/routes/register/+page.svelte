@@ -1,45 +1,57 @@
-<script>
+<script lang="ts">
+    import { getFirebaseContext } from "$lib/stores/sdk.js";
+    import SignedOut from "$lib/components/SignedOut.svelte";
+    import SignedIn from "$lib/components/SignedIn.svelte";
     import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-    import { doc, setDoc } from "firebase/firestore"; 
-    
-    let email = '';
-    let password = '';
-    let username = '';
+    import { doc, setDoc, Timestamp} from "firebase/firestore";
+
+    let username = "";
+    let email = "";
+    let password = "";
 
     const auth = getAuth();
+    const firestore = getFirebaseContext().firestore;
 
-    const register = () => {
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed up 
-                const user = userCredential.user;
-                // Add user to Firestore
-                return setDoc(doc(db, "users", user.uid), {
-                    username: username,
-                    email: email
-                });
-            })
-            .then(() => {
-                // User added to Firestore
-                // ...
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                // ..
-            });
-    }
+    const register = async () => {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+            const user = userCredential.user;
+            const userDocRef = doc(firestore, "users", user.uid);
+            const userData = {
+                username,
+                email,
+                createdAt: Date.now(),
+            };
+            await setDoc(userDocRef, userData);
+            alert("User registered successfully");
+        } catch (error) {
+            console.error("Error registering user:", error);
+            alert("Error registering user:", error.message);
+        }
+    };
 </script>
 
-<form on:submit|preventDefault={register}>
-    <label for="username">Username:</label>
-    <input id="username" type="text" bind:value={username} required>
+<SignedOut let:auth>
+    <h1>Sign in or Register</h1>
 
-    <label for="email">Email:</label>
-    <input id="email" type="email" bind:value={email} required>
+    <form on:submit|preventDefault={register}>
+        <label for="username">Username</label>
+        <input type="text" id="username" bind:value={username} required />
 
-    <label for="password">Password:</label>
-    <input id="password" type="password" bind:value={password} required>
+        <label for="email">Email</label>
+        <input type="email" id="email" bind:value={email} required />
 
-    <button type="submit">Register</button>
-</form>
+        <label for="password">Password</label>
+        <input type="password" id="password" bind:value={password} required />
+
+        <button type="submit">Register</button>
+    </form>
+</SignedOut>
+
+<SignedIn>
+    <h2>You are already signed in</h2>
+</SignedIn>
