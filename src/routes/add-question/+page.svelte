@@ -55,7 +55,7 @@
 <h1>Add Question</h1>
 
 <SignedIn let:user>
-    <form on:submit={addQuestion(user.uid)}>
+    <form on:submit|preventDefault={addQuestion(user.uid)}>
         <input type="text" bind:value={title} placeholder="Title" required />
         <textarea bind:value={body} placeholder="Body" required />
         <select bind:value={selectedTag} required>
