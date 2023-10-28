@@ -7,6 +7,7 @@ import {
     setDoc,
     increment,
     updateDoc,
+    orderBy,
     query,
     where,
 } from "firebase/firestore";
@@ -51,7 +52,8 @@ export async function fetchAnswers(firestore, questionId) {
     const answersCollection = collection(firestore, "answers");
     const answersQuery = query(
         answersCollection,
-        where("questionId", "==", questionId)
+        where("questionId", "==", questionId),
+        orderBy("createdAt")
     );
     const answersSnap = await getDocs(answersQuery);
     return answersSnap.docs.map(doc => ({
