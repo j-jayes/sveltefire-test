@@ -10,6 +10,7 @@ import {
     orderBy,
     query,
     where,
+    limit
 } from "firebase/firestore";
 
 export function formatDate(dateString) {
@@ -97,3 +98,7 @@ export async function handleUpvote(firestore, userId, questionOrAnswerId, isQues
         console.error('Error handling upvote:', error);
     }
 }
+
+
+
+

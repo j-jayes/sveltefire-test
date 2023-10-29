@@ -3,11 +3,12 @@
     import SignedOut from "$lib/components/SignedOut.svelte";
     import SignedIn from "$lib/components/SignedIn.svelte";
     import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-    import { doc, setDoc, Timestamp} from "firebase/firestore";
+    import { doc, setDoc, Timestamp } from "firebase/firestore";
 
     let username = "";
     let email = "";
     let password = "";
+    let feedbackMessage = "";
 
     const auth = getAuth();
     const firestore = getFirebaseContext().firestore;
@@ -27,31 +28,73 @@
                 createdAt: Date.now(),
             };
             await setDoc(userDocRef, userData);
-            alert("User registered successfully");
+            feedbackMessage = "Registration Successful";
         } catch (error) {
             console.error("Error registering user:", error);
-            alert("Error registering user:", error.message);
+            feedbackMessage = `Error: ${error.message}`; // Update feedback message on error
         }
     };
 </script>
 
-<SignedOut let:auth>
-    <h1>Sign in or Register</h1>
+<container>
+    <SignedOut let:auth>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <h1 class="text-center mb-4">Register</h1>
+                    {#if feedbackMessage}
+                        <!-- Conditionally render feedback message -->
+                        <div
+                            class="alert alert-{feedbackMessage.startsWith(
+                                'Error'
+                            )
+                                ? 'danger'
+                                : 'success'}"
+                        >
+                            {feedbackMessage}
+                        </div>
+                    {/if}
+                    <form on:submit|preventDefault={register}>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input
+                                type="text"
+                                id="username"
+                                bind:value={username}
+                                class="form-control"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input
+                                type="email"
+                                id="email"
+                                bind:value={email}
+                                class="form-control"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input
+                                type="password"
+                                id="password"
+                                bind:value={password}
+                                class="form-control"
+                                required
+                            />
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block"
+                            >Register</button
+                        >
+                    </form>
+                </div>
+            </div>
+        </div>
+    </SignedOut>
 
-    <form on:submit|preventDefault={register}>
-        <label for="username">Username</label>
-        <input type="text" id="username" bind:value={username} required />
-
-        <label for="email">Email</label>
-        <input type="email" id="email" bind:value={email} required />
-
-        <label for="password">Password</label>
-        <input type="password" id="password" bind:value={password} required />
-
-        <button type="submit">Register</button>
-    </form>
-</SignedOut>
-
-<SignedIn>
-    <h2>You are already signed in</h2>
-</SignedIn>
+    <SignedIn>
+        <h2 class="text-center">You have signed in</h2>
+    </SignedIn>
+</container>

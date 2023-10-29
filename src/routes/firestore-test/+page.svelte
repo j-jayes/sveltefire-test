@@ -10,7 +10,8 @@
   } from "firebase/firestore";
   import Collection from "$lib/components/Collection.svelte";
   import SignedIn from "$lib/components/SignedIn.svelte";
-  import { getFirebaseContext } from "$lib/stores/sdk.js";
+  import { getFirebaseContext } from "$lib/stores/sdk.ts";
+  import { formatDate } from "$lib/utils.ts";
 
   const firestore = getFirebaseContext().firestore!;
 
@@ -21,11 +22,6 @@
         "firestore item " + (Math.random() + 1).toString(36).substring(7),
       created: Date.now(),
     });
-  }
-
-  function formatDate(dateString) {
-    const options = { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric"};
-    return new Date(dateString).toLocaleDateString(undefined, options);
   }
 
   $: makeQuery = (uid: string) => {
