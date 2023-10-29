@@ -2,33 +2,22 @@
   import { getFirebaseContext } from "$lib/stores/sdk.js";
   import PopularQuestions from "$lib/components/PopularQuestions.svelte";
 
-
   const ctx = getFirebaseContext();
-
 </script>
 
-<h1>Welcome to SvelteFire</h1>
-
-<ul>
-  <li><a href="/auth-test">Auth Test</a></li>
-  <li><a href="/firestore-test">Firestore Test</a></li>
-  <li><a href="/ssr-test">SSR Test</a></li>
-  <li><a href="/storage-test">Storage Test</a></li>
-  <li><a href="/add-question-data-test">Add Question Data Test</a></li>
-  <li><a href="/add-question">Add Question</a></li>
-  <li><a href="/popular-questions">Popular Questions</a></li>
-</ul>
-<ul>
-  <li data-testid="auth">Auth Context: {!!ctx.auth}</li>
-  <li data-testid="firestore">Firestore Context: {!!ctx.firestore}</li>
-  <li data-testid="storage">Storage Context: {!!ctx.storage}</li>
-</ul>
-
-
-
-
+<div class="container-md">
+  <h2 class="text-center my-5">Welcome to the SCB Users Group</h2>
+  <p class="lead">
+    This site is for users of the SCB app to ask questions, share knowledge, and
+    help each other out. Whether you're a new user or an experienced one, we
+    welcome you to join our community and contribute to the discussion.
+  </p>
+</div>
 <div class="container-md d-flex justify-content-center">
   <div class="col-md-8">
+    <a href="/add-question" class="btn btn-primary btn-lg">Add Question</a>
+    <br />
+    <br />
     <PopularQuestions />
   </div>
 </div>
